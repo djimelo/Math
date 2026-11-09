@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصة الرياضيات | إشراف محمد خليفه السهلي</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Amiri:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1e3a8a;
+            --primary-light: #3b82f6;
+            --accent: #10b981;
+            --danger: #ef4444;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --gold: #d97706;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            line-height: 1.6;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+            color: white;
+            padding: 2.2rem 1rem;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .owner-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 0.4rem 1.4rem;
+            border-radius: 50px;
+            font-size: 0.95rem;
+            margin-bottom: 0.8rem;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+        }
+
+        header h1 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-bottom: 0.4rem;
+        }
+
+        header p {
+            font-size: 1.05rem;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            background: var(--card-bg);
+            border: 2px solid var(--border);
+            padding: 0.7rem 1.3rem;
+            font-size: 0.95rem;
+            font-weight: 700;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: var(--text-muted);
+        }
+
+        .tab-btn.active, .tab-btn:hover {
+            border-color: var(--primary-light);
+            background: var(--primary-light);
+            color: white;
+        }
+
+        .tab-btn.teacher-tab {
+            border-color: #8b5cf6;
+            color: #8b5cf6;
+        }
+
+        .tab-btn.teacher-tab.active, .tab-btn.teacher-tab:hover {
+            background: #8b5cf6;
+            color: white;
+        }
+
+        .section-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 2rem;
+            border: 1px solid var(--border);
+            display: none;
+        }
+
+        .section-card.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            font-size: 1.45rem;
+            color: var(--primary);
+            margin-bottom: 1.2rem;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 0.5rem;
+        }
+
+        .instructions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 1.2rem;
+            margin-top: 1rem;
+        }
+
+        .instruction-box {
+            background: #f1f5f9;
+            padding: 1.2rem;
+            border-radius: 12px;
+            border-right: 4px solid var(--primary-light);
+        }
+
+        .summary-card {
+            background: #eff6ff;
+            border: 1px dashed var(--primary-light);
+            padding: 1.2rem;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+        }
+
+        .quiz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            background: #f8fafc;
+            padding: 0.8rem 1.2rem;
+            border-radius: 10px;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .question-box {
+            background: #ffffff;
+            border: 1.5px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .question-text {
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+        }
+
+        .option-item {
+            padding: 0.8rem 1rem;
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .option-item:hover {
+            background: #f1f5f9;
+            border-color: var(--primary-light);
+        }
+
+        .option-item.correct {
+            background: #dcfce7 !important;
+            border-color: var(--accent) !important;
+            color: #15803d;
+            font-weight: bold;
+        }
+
+        .option-item.wrong {
+            background: #fee2e2 !important;
+            border-color: var(--danger) !important;
+            color: #b91c1c;
+        }
+
+        .feedback {
+            margin-top: 1rem;
+            padding: 0.8rem;
+            border-radius: 8px;
+            font-weight: 600;
+            display: none;
+        }
+
+        .btn {
+            background: var(--primary);
+            color: white;
+            padding: 0.65rem 1.4rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn:hover { opacity: 0.9; transform: translateY(-1px); }
+        .btn-purple { background: #8b5cf6; }
+        .btn-green { background: #10b981; }
+        .btn-danger { background: var(--danger); padding: 0.4rem 0.8rem; font-size: 0.85rem; }
+        .btn-reset { background: #64748b; }
+
+        /* صندوق مكافأة الطالب عند العلامة الكاملة */
+        #certificate-claim-box {
+            display: none;
+            background: linear-gradient(135deg, #fef3c7 0%, #fffbeb 100%);
+            border: 2px solid var(--gold);
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 2rem;
+            animation: fadeIn 0.4s ease;
+        }
+
+        /* نافذة الشهادة */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 9999;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .certificate-container {
+            background: #fff;
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 40px;
+            border: 12px double #1e3a8a;
+            outline: 3px solid #d97706;
+            outline-offset: -8px;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            border-radius: 4px;
+        }
+
+        .cert-title {
+            font-family: 'Amiri', serif;
+            font-size: 2.6rem;
+            color: #1e3a8a;
+            margin-bottom: 10px;
+        }
+
+        .cert-subtitle {
+            font-size: 1.2rem;
+            color: #64748b;
+            margin-bottom: 25px;
+        }
+
+        .cert-name {
+            font-family: 'Amiri', serif;
+            font-size: 2.3rem;
+            color: #b45309;
+            border-bottom: 2px solid #b45309;
+            display: inline-block;
+            padding: 0 25px;
+            margin: 15px 0;
+        }
+
+        .cert-body {
+            font-size: 1.25rem;
+            line-height: 1.8;
+            margin: 20px 0 40px 0;
+            color: #1f2937;
+        }
+
+        .cert-signatures {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding: 0 20px;
+        }
+
+        .cert-sign-box {
+            text-align: center;
+        }
+
+        .cert-sign-title {
+            font-size: 0.95rem;
+            color: #64748b;
+            margin-bottom: 5px;
+        }
+
+        .cert-sign-name {
+            font-weight: 700;
+            font-size: 1.15rem;
+            color: #1e3a8a;
+        }
+
+        /* لوحة تحكم نظام الأستاذ */
+        .admin-box {
+            border: 2px dashed #8b5cf6;
+            background: #faf5ff;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+        }
+
+        .form-group { margin-bottom: 1rem; }
+        label { display: block; font-weight: 700; margin-bottom: 0.4rem; }
+        input[type="text"], select {
+            width: 100%;
+            padding: 0.7rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .answer-key-box {
+            display: none;
+            background: #ecfdf5;
+            border: 2px solid #10b981;
+            padding: 1.2rem;
+            border-radius: 12px;
+            margin: 1.5rem 0;
+        }
+
+        .key-item {
+            background: white;
+            padding: 0.8rem;
+            border-radius: 8px;
+            margin-bottom: 0.6rem;
+            border-right: 4px solid #10b981;
+        }
+
+        .manage-q-item {
+            background: white;
+            border: 1px solid var(--border);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 0.8rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            background: #0f172a;
+            color: white;
+            margin-top: 3rem;
+        }
+
+        @media print {
+            body * { visibility: hidden; }
+            #cert-modal, #cert-modal * { visibility: visible; }
+            #cert-modal {
+                position: absolute;
+                left: 0; top: 0;
+                width: 100%; height: 100%;
+                background: white;
+                padding: 0;
+            }
+            .no-print { display: none !important; }
+            .certificate-container {
+                box-shadow: none;
+                border: 8px double #1e3a8a;
+                margin: 0;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="owner-badge">
+            صاحب المنصة والمشرف العام: <strong>محمد خليفه فرحان البرازي السهلي</strong>
+        </div>
+        <h1>منصة الرياضيات التعليمية التفاعلية</h1>
+        <p>منهج الرياضيات من بداية الفترة الأولى حتى درس «المعادلات ذات الخطوتين»</p>
+    </header>
+
+    <div class="container">
+        <div class="nav-tabs">
+            <button class="tab-btn active" onclick="switchTab('instructions')">📖 دليل وتعليمات الطالب</button>
+            <button class="tab-btn" onclick="switchTab('summary')">📝 الملخص والقوانين</button>
+            <button class="tab-btn" onclick="switchTab('quiz')">✍️ التمارين والشهادة</button>
+            <button class="tab-btn teacher-tab" onclick="switchTab('teacher')">⚙️ نظام الأستاذ (لوفان الشمري)</button>
+        </div>
+
+        <!-- 1. دليل وتعليمات الطالب -->
+        <section id="instructions" class="section-card active">
+            <h2>📌 إرشادات وتعليمات للطلاب الأعزاء</h2>
+            <div class="instructions-grid">
+                <div class="instruction-box">
+                    <h3>١. المذاكرة أولاً</h3>
+                    <p>راجع قسم <strong>الملخص والقوانين</strong> وتأكد من فهمك لخطوات حل المعادلات البسيطة والمعادلات ذات الخطوتين.</p>
+                </div>
+                <div class="instruction-box">
+                    <h3>٢. الترتيب والدقة</h3>
+                    <p>استخدم الورقة والقلم، وتذكر دائماً: تخلص من الجمع أو الطرح أولاً ثم الضرب أو القسمة.</p>
+                </div>
+                <div class="instruction-box">
+                    <h3>٣. الحصول على الشهادة 🎓</h3>
+                    <p>عند إجابتك على جميع الأسئلة بصورة صحيحة (درجة كاملة)، سيفتح لك نظام إصدار <strong>شهادة التفوق الرسمية</strong> باسمك فوراً!</p>
+                </div>
+                <div class="instruction-box">
+                    <h3>٤. تحديثات مستمرة</h3>
+                    <p>يتابع الأستاذ <strong>لوفان الشمري</strong> إضافة نماذج واختبارات دورية من خلال لوحة الإدارة المخصصة.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. الملخص والمفاهيم -->
+        <section id="summary" class="section-card">
+            <h2>📚 ملخص المفاهيم المعتمدة</h2>
+            
+            <div class="summary-card">
+                <h3>١. قواعد الإشارات:</h3>
+                <p>• جمع إشارات متشابهة: نجمع ونضع نفس الإشارة | إشارات مختلفة: نطرح ونضع إشارة الأكبر قيمة مطلقة.</p>
+                <p>• الضرب والقسمة: تشابه الإشارات = موجب (+) | اختلاف الإشارات = سالب (-).</p>
+            </div>
+
+            <div class="summary-card">
+                <h3>٢. المعادلات ذات الخطوة الواحدة:</h3>
+                <p>نستخدم العملية العكسية لعزل المتغير:</p>
+                <p>• الجمع يعكسه الطرح: $س + ٦ = ١٠ \rightarrow س = ٤$</p>
+                <p>• الضرب يعكسه القسمة: $٤س = ٢٠ \rightarrow س = ٥$</p>
+            </div>
+
+            <div class="summary-card">
+                <h3>٣. المعادلات ذات الخطوتين:</h3>
+                <p><strong>قاعدة ذهبية:</strong> التخلص من الجمع/الطرح أولاً، ثم التخلص من الضرب/القسمة ثانياً.</p>
+                <p style="color: #1e3a8a; font-weight: bold; margin-top: 5px;">
+                    مثال: ۳س - ۵ = ۱۰ <br>
+                    الخطوة ١: إضافة ۵ للطرفين $\rightarrow$ ۳س = ۱۵ <br>
+                    الخطوة ٢: قسمة الطرفين على ۳ $\rightarrow$ س = ۵
+                </p>
+            </div>
+        </section>
+
+        <!-- 3. اختبار تفاعلي والشهادة -->
+        <section id="quiz" class="section-card">
+            <h2>✍️ بنك الأسئلة والتمارين</h2>
+            
+            <div id="certificate-claim-box">
+                <h3 style="color: #b45309; font-size: 1.4rem;">🎉 ألف مبروك! لقد أجبت على جميع الأسئلة إجابة صحيحة!</h3>
+                <p style="margin: 0.5rem 0 1rem;">أدخل اسمك الكريم أدناه لاستلام شهادة التفوق المعتمدة فوراً:</p>
+                <div style="display: flex; gap: 0.5rem; justify-content: center; max-width: 500px; margin: auto;">
+                    <input type="text" id="student-name-input" placeholder="اكتب اسمك الثلاثي هنا...">
+                    <button class="btn btn-green" onclick="generateCertificate()">إصدار الشهادة 🎓</button>
+                </div>
+            </div>
+
+            <div class="quiz-header">
+                <div>الدرجة الحالية: <strong id="score" style="color: var(--primary);">0</strong> من <span id="total-q">0</span></div>
+                <button class="btn btn-reset" onclick="resetQuiz()">إعادة الاختبار من البداية</button>
+            </div>
+
+            <div id="quiz-container"></div>
+        </section>
+
+        <!-- 4. نظام الأستاذ (لوفان الشمري) -->
+        <section id="teacher" class="section-card">
+            <h2>⚙️ نظام الأستاذ (لوحة تحكم الأستاذ: لوفان الشمري)</h2>
+            <p style="margin-bottom: 1.5rem; color: var(--text-muted);">
+                مرحباً بك يا أستاذ <strong>لوفان الشمري</strong>. يمكنك التحكم بالأسئلة، الاطلاع على الحلول النموذجية، وتحديث بنك الاختبارات.
+            </p>
+
+            <div style="margin-bottom: 1.5rem; display: flex; gap: 1rem; flex-wrap: wrap;">
+                <button class="btn btn-green" onclick="toggleAnswerKey()" style="font-size: 1rem;">
+                    👁️ كشف الإجابات النموذجية لجميع الأسئلة
+                </button>
+            </div>
+
+            <div id="answers-key-panel" class="answer-key-box">
+                <h3 style="color: #065f46; margin-bottom: 1rem;">📋 مفتاح الحل النموذجي لجميع الأسئلة:</h3>
+                <div id="answers-key-list"></div>
+            </div>
+
+            <div class="admin-box">
+                <h3 style="margin-bottom: 1rem; color: #6d28d9;">➕ إضافة سؤال جديد</h3>
+                <form id="add-question-form" onsubmit="handleAddQuestion(event)">
+                    <div class="form-group">
+                        <label>نص السؤال الجديد:</label>
+                        <input type="text" id="q-text" placeholder="مثال: حل المعادلة: ٢س + ٨ = ٢٠" required>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem;">
+                        <div class="form-group">
+                            <label>الخيار (أ):</label>
+                            <input type="text" id="opt-0" placeholder="الخيار الأول" required>
+                        </div>
+                        <div class="form-group">
+                            <label>الخيار (ب):</label>
+                            <input type="text" id="opt-1" placeholder="الخيار الثاني" required>
+                        </div>
+                        <div class="form-group">
+                            <label>الخيار (ج):</label>
+                            <input type="text" id="opt-2" placeholder="الخيار الثالث" required>
+                        </div>
+                        <div class="form-group">
+                            <label>الخيار (د):</label>
+                            <input type="text" id="opt-3" placeholder="الخيار الرابع" required>
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 0.8rem;">
+                        <div class="form-group">
+                            <label>تحديد الإجابة الصحيحة:</label>
+                            <select id="correct-opt" required>
+                                <option value="0">الخيار (أ)</option>
+                                <option value="1">الخيار (ب)</option>
+                                <option value="2">الخيار (ج)</option>
+                                <option value="3">الخيار (د)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>شرح الحل وطريقته (يظهر للطالب):</label>
+                            <input type="text" id="q-explain" placeholder="مثال: نطرح ٨ ثم نقسم على ٢">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-purple">نشر السؤال في المنصة</button>
+                </form>
+            </div>
+
+            <h3>📋 قائمة الأسئلة الحالية (<span id="count-q">0</span> سؤال):</h3>
+            <div id="teacher-q-list" style="margin-top: 1rem;"></div>
+            <button class="btn btn-reset" onclick="restoreDefaultQuestions()" style="margin-top: 1rem;">استعادة الأسئلة الأساسية</button>
+        </section>
+    </div>
+
+    <!-- نافذة الشهادة المنبثقة -->
+    <div id="cert-modal" class="modal">
+        <div class="certificate-container">
+            <h1 class="cert-title">شهــــادة تفــــوّق وإنجــــاز</h1>
+            <p class="cert-subtitle">منصة الرياضيات التعليمية للفترة الأولى</p>
+            
+            <p class="cert-body">
+                تشهد إدارة المنصة بأن الطالب المتميز / الطالبة المتميزة:<br>
+                <strong class="cert-name" id="cert-student-name">اسم الطالب</strong><br>
+                قد اجتاز/ت بنجاح وتفوق تام اختبار مادة الرياضيات من بد
